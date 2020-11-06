@@ -1,21 +1,13 @@
 from selectorlib import Extractor
 import requests 
 import requests_cache
-import json 
-from time import sleep
-import urllib.parse
-from flask import Flask, jsonify, Response
 import time
 
-app = Flask(__name__)
+searchSelector = Extractor.from_yaml_file('selectors/search_selector.yml')
+productSelector = Extractor.from_yaml_file('selectors/product_selector.yml')
 
-# Create an Extractor by reading from the YAML file
-searchSelector = Extractor.from_yaml_file('search_selector.yml')
-productSelector = Extractor.from_yaml_file('product_selector.yml')
-
-requests_cache.install_cache('search_cache', backend='sqlite', expire_after=180)
-requests_cache.install_cache('product_cache', backend='sqlite', expire_after=180)
-
+requests_cache.install_cache('cache/search_cache', backend='sqlite', expire_after=180)
+requests_cache.install_cache('cache/product_cache', backend='sqlite', expire_after=180)
 
 def scrape(url, type):  
 
@@ -49,26 +41,3 @@ def scrape(url, type):
         return searchSelector.extract(r.text)
     elif type == "product":
         return productSelector.extract(r.text)
-
-
-@app.route("/search/<searchQueryString>", methods=["GET"])
-def getSearchResults(searchQueryString):
-    searchQueryURL = 'https://www.amazon.com/s?k=' + urllib.parse.quote_plus(searchQueryString)
-    data = scrape(searchQueryURL, "search")
-    if data:
-        formattedData = json.dumps(data)
-        # sleep(5)
-    return Response(formattedData, mimetype='text/json')
-
-@app.route("/product/<productQueryString>", methods=["GET"])
-def getProductResults(productQueryString):
-    productQueryURL = 'https://www.amazon.com/dp/' + urllib.parse.quote_plus(productQueryString)
-    data = scrape(productQueryURL, "product")
-    if data:
-        formattedData = json.dumps(data)
-        # sleep(5)
-    return Response(formattedData, mimetype='text/json')
-
-
-if __name__ == '__main__':
-    app.run(port=8080)

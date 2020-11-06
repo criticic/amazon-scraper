@@ -21,7 +21,7 @@ From a terminal
 ### Usage
 Run
 ```sh
-python amazonscaper.py
+python main.py
 ```
 
 ### GET /product/<id>

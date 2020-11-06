@@ -1,2 +1,3 @@
 .venv
-*.sqlite
+cache
+__pycache__
