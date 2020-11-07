@@ -1,7 +1,22 @@
 from selectorlib import Extractor
+
 import requests 
 import requests_cache
+
 import time
+import random
+
+user_agent_list = [
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:77.0) Gecko/20100101 Firefox/77.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.23 (KHTML, like Gecko) Chrome/81.0.4103.97 Safari/532.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100203 Firefox/75.0',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/82.0.4103.61 Safari/535.36'
+]
 
 searchSelector = Extractor.from_yaml_file('selectors/search_selector.yml')
 productSelector = Extractor.from_yaml_file('selectors/product_selector.yml')
@@ -11,10 +26,12 @@ requests_cache.install_cache('cache/product_cache', backend='sqlite', expire_aft
 
 def scrape(url, type):  
 
+    user_agent = random.choice(user_agent_list)
+
     headers = {
         'dnt': '1',
         'upgrade-insecure-requests': '1',
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36',
+        'user-agent': user_agent,
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'sec-fetch-site': 'same-origin',
         'sec-fetch-mode': 'navigate',
@@ -23,6 +40,7 @@ def scrape(url, type):
         'referer': 'https://www.amazon.com/',
         'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     }
+
 
     # Download the page using requests
     print("Downloading %s"%url)

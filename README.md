@@ -8,6 +8,7 @@ Selectorlib selector based on tutorial at [ScrapeHero Tutorials](https://www.scr
 1. Cached(prevents redundancy & also prevents being rate-limited & increases speed)
 2. Search
 3. Product Details
+4. Rotates User Agent Strings(prevents being rate-limited)
 
 ## Installation
 
