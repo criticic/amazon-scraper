@@ -12,6 +12,8 @@ Selectorlib selector based on tutorial at [ScrapeHero Tutorials](https://www.scr
 
 ## Installation
 
+Caching Functionality requires Sqlite3 to be present on your computer.
+
 From a terminal 
 
 1. Clone this project and cd into it `cd amazon-scraper`
